@@ -36,8 +36,8 @@ int NavigationEngine::navigate(string srcName, string destName)
 	if(gps.locate(cur_pos) != 0)
 	{
 		// Fail to locate
-		FILE_LOG(logERROR) << "Navig: GPS locating error";
-		return -1;		
+		//FILE_LOG(logERROR) << "Navig: GPS locating error";
+		//return -1;		
 	}
 
 	// Calculate the distance to the first sub-route

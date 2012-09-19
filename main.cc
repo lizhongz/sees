@@ -15,10 +15,18 @@ int main()
 	NavigationEngine nvgEng;
 	
 	FILE* pFile = fopen("app.log", "w");
-	//Output2FILE::Stream() = pFile;
+	Output2FILE::Stream() = pFile;
         FILELog::ReportingLevel() = FILELog::FromString("DEBUG1");
 
-#if 1 // test GPS
+#if 1 // test Navigation
+	while(1)
+	{
+		if(nvgEng.navigate("ISIMA GATE", "TRAM Station") == 0)
+			break;
+	}
+#endif
+
+#if 0 // test GPS
 	int i = 0;
 	GPS gps((char *)"/dev/ttyACM0");
 	Coordinate coor;
@@ -29,13 +37,6 @@ int main()
 	}
 #endif
 
-#if 0
-	while(1)
-	{
-		if(nvgEng.navigate("ISIMA GATE", "TRAM Station") == 0)
-			break;
-	}
-#endif
 	return 0;
 }
 

@@ -54,11 +54,12 @@ void Uart::open_port(char *path, int oflags)
 	usleep(10000);
 }
 
-int Uart::uart_read(char *data, int len)
+int Uart::read_data(char *data, int len)
 {
 	int i;
 	int flag;
 
+/*
 	for(i = 0; i < len; i++)
 	{
 		//printf(".");		
@@ -74,11 +75,14 @@ int Uart::uart_read(char *data, int len)
 		
 	}
 	//tcflush(fd,TCIOFLUSH);
-
-	return i;
+*/
+	
+	flag = read(fd, &data[0], len);	
+	return flag;
 }
 
-int Uart::uart_write(const char *data, const int len)
+
+int Uart::write_data(const char *data, const int len)
 {
 	int i;
 	int flag;

@@ -12,9 +12,9 @@ public:
 	Uart(char *path, int oflags);
 	~Uart();
 	// read data from uart port
-	int uart_read(char *data, int len);
+	int read_data(char *data, int len);
 	// write data from uart port
-	int uart_write(const char *data, const int len);
+	int write_data(const char *data, const int len);
 };
 
 #endif
