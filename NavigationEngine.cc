@@ -38,20 +38,16 @@ int NavigationEngine::navigate()
 	// Begin to navigate
 	FILE_LOG(logINFO) << "Navig: Begin to navigate";	
 
-	// Guide VIP to side walk
-	double tmpDist;
+	// The VIP should face the route direction and 
+	// system checks if the VIP is on or beside the route
 	if(detect_y_route() == -1)
 	{
-		FILE_LOG(logINFO) << "Navig: No x route";	
+		FILE_LOG(logINFO) << "Navig: No y route";	
 	}
 	else 
 	{
-		FILE_LOG(logINFO) << "Navig: Detected x route, distance: " 
-			<< tmpDist;	
+		FILE_LOG(logINFO) << "Navig: Detected y route" ;
 	}
-
-	//test
-	return 0;
 
 	int subRtNum = route.pnts.size();
 	for(sub_rt_inx = 1; sub_rt_inx < subRtNum; sub_rt_inx++)	
@@ -139,8 +135,6 @@ int NavigationEngine::setup_route(string srcName, string destName)
 		FILE_LOG(logINFO) << "Navig: Route does not exist";
 		return -1;
 	}
-	//test
-	return 0; 
 
 	// Get current position by using GPS 
 	if(gps.locate(cur_pos) != 0)
