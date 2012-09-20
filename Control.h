@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include "NavigationEngine.h"
+#include "env_detection.h"
 
 class Control
 {
@@ -27,6 +28,7 @@ public:
 
 private:
 	NavigationEngine *p_nvigt_eng; // Navigation engine
+	EnvDetection	 *p_env_det;
 	FILE *p_log_file;
 };
 

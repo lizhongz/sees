@@ -10,12 +10,17 @@ Control::Control() : p_nvigt_eng(NULL)
 	p_log_file = fopen("app.log", "w");
 	// Output2FILE::Stream() = p_log_file;
         FILELog::ReportingLevel() = FILELog::FromString("DEBUG1");
+
+
+	p_env_det = new EnvDetection();
 }
 
 Control::~Control()
 {
 	// Close log file
 	fclose(p_log_file);
+
+	delete p_env_det;
 }
 
 void Control::schedule()
@@ -72,6 +77,7 @@ void Control::open_nvigt_eng()
 
 	// Create navigation engine
 	p_nvigt_eng = new NavigationEngine();
+	p_nvigt_eng->set_env_detection(p_env_det);
 
 	FILE_LOG(logINFO) << "Ctrl: Navigation engine was opened";
 }
@@ -116,12 +122,6 @@ int Control::start_nvigt()
 	//cin >> srcName;
 	//cout << "Destination name: ";
 	//cin >> destName;
-
-	if(p_nvigt_eng == NULL)
-	{
-		// If navigation engine is not opened
-		return -1;
-	}
 
 	// Set up navigation route
 	if(p_nvigt_eng->setup_route("ISIMA GATE", 

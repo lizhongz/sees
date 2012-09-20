@@ -36,7 +36,19 @@ void NavigationEngine::run()
 int NavigationEngine::navigate()
 {	
 	// Begin to navigate
-	FILE_LOG(logINFO) << "Navig: Begin to navigate";
+	FILE_LOG(logINFO) << "Navig: Begin to navigate";	
+
+	// Guide VIP to side walk
+	double tmpDist;
+	if(detect_x_route(tmpDist) == -1)
+	{
+		FILE_LOG(logINFO) << "Navig: No x route";	
+	}
+	else 
+	{
+		FILE_LOG(logINFO) << "Navig: Detected x route, distance: " 
+			<< tmpDist;	
+	}
 
 	int subRtNum = route.pnts.size();
 	for(sub_rt_inx = 1; sub_rt_inx < subRtNum; sub_rt_inx++)	
@@ -97,6 +109,16 @@ int NavigationEngine::navigate()
 				<< route.pnts[sub_rt_inx].coor.lat 
 				<< route.pnts[sub_rt_inx].coor.lon;
 			FILE_LOG(logINFO) << "Navig: Angle: " << angle;
+
+			// Detect y route
+			if(detect_y_route() == -1)
+			{
+				FILE_LOG(logINFO) << "Navig: No y route";	
+			}
+			else 
+			{
+				FILE_LOG(logINFO) << "Navig: Detected y route";	
+			}
 		}
 	}
 	
@@ -145,3 +167,40 @@ int NavigationEngine::init_devs()
 	// Initialize GPS
 	//gps = GPS((char *)"/dev/ttyACM0");
 }
+
+void NavigationEngine::set_env_detection(EnvDetection *pEnvDet)	
+{
+	this->p_env_det = pEnvDet;
+}
+
+int NavigationEngine::detect_x_route(double &dist)
+{
+	int i = 0;
+	while(i++ < 10)
+	{
+		if(p_env_det->road_detect_x(&dist))
+		{
+			return 0;
+		}		
+		usleep(1000000);
+	}
+
+	return -1;
+}
+
+int NavigationEngine::detect_y_route()
+{
+	double tmpDist;
+	int i = 0;
+	while(i++ < 10)
+	{
+		if(p_env_det->road_detect_y(&tmpDist))
+		{
+			return 0;
+		}		
+		usleep(1000000);
+	}
+
+	return -1;
+}
+

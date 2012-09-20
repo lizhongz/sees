@@ -7,6 +7,7 @@
 #include "Coordinate.h"
 #include "GPS.h"
 #include "Runnable.h"
+#include "env_detection.h"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ private:
 	int		sub_rt_inx;	// Index of next route point in route 
 	double		sub_rt_dist;	// Distance of current sub-route	
 	double		sub_rt_rm_dist;	// Remaining Distance from current position to the end of sub_rt
+	EnvDetection	*p_env_det;
+
 	// Only the distance for VIP to the route 
 	// is less than this value can this engine navigate
 	static constexpr double DIST_2_RT_TRSHD = 10.0;
@@ -43,6 +46,12 @@ public:
 
 	// Inherited from Runnable class
 	void run();
+
+	void set_env_detection(EnvDetection *pEnvDet);	
+	
+	int detect_x_route(double &dist);
+
+	int detect_y_route();
 };
 
 #endif

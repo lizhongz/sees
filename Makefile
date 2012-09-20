@@ -1,8 +1,8 @@
-CC=g++ -std=c++11
-CFLAGS='-g'
-INFLAGS=-I./
-LDFLAGS=-lpthread
-SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc Runnable.cc Control.cc Client.cc
+CC=g++-4.7 -std=c++11
+CFLAGS=-g `pkg-config opencv --cflags`
+INFLAGS=-I./ 
+LDFLAGS=-lpthread `pkg-config opencv --libs` -ljpeg
+SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc Runnable.cc Control.cc MSAC.cc errorNIETO.cc lmmin.cc object_detection.cc road_detection.cc road_detection_y.cc camera.cc env_detection.cc 
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=run
 
