@@ -10,6 +10,7 @@
 #define RIGHT 3
 
 #define MAX_NUM_LINES	200
+#define MAX_DISTANCE	10000
 
 class RoadDetectionY:public ObjectDetection
 {

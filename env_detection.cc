@@ -2,7 +2,7 @@
 
 EnvDetection::EnvDetection()
 {
-	camera = new CCamera(VIDEO_DEV);
+	camera = new CCamera((char*)VIDEO_DEV);
 	roadX= NULL;
 	roadY = NULL;
 	camera->cam_init();

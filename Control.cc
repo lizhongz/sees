@@ -8,7 +8,7 @@ Control::Control() : p_nvigt_eng(NULL)
 {
 	// Open log function
 	p_log_file = fopen("app.log", "w");
-	// Output2FILE::Stream() = p_log_file;
+	Output2FILE::Stream() = p_log_file;
         FILELog::ReportingLevel() = FILELog::FromString("DEBUG1");
 
 
@@ -51,6 +51,10 @@ void Control::schedule()
 				if(start_nvigt() != 0)
 				{
 					FILE_LOG(logINFO) << "Ctrl: Cannot navigation";
+				}
+				else
+				{
+					break;
 				}
 			}
 		}

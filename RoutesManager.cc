@@ -20,7 +20,7 @@ int RoutesManager::get_route(const string src, const string dest, Route &route)
 	RoutePoint rtPnt;
 
 	route.pnts.clear();
-
+/*
 	coor.lat = 45.759291;
 	coor.lon = 3.111344;
 	rtPnt.name = "ISIMA GATE";
@@ -36,6 +36,24 @@ int RoutesManager::get_route(const string src, const string dest, Route &route)
 	coor.lat = 45.758843;
 	coor.lon = 3.113892;
 	rtPnt.name = "Tram Station";
+	rtPnt.coor = coor;	
+	route.pnts.push_back(rtPnt);
+*/
+	coor.lat = 45.757499;
+	coor.lon = 3.114731;
+	rtPnt.name = "Tom's Home";
+	rtPnt.coor = coor;	
+	route.pnts.push_back(rtPnt);
+
+	coor.lat = 45.757793;
+	coor.lon = 3.11552;
+	rtPnt.name = "";
+	rtPnt.coor = coor;	
+	route.pnts.push_back(rtPnt);
+
+	coor.lat = 45.757249;
+	coor.lon = 3.115976;
+	rtPnt.name = "Jerry's Home";
 	rtPnt.coor = coor;	
 	route.pnts.push_back(rtPnt);
 

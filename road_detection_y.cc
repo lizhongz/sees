@@ -1,9 +1,8 @@
 #include "road_detection_y.h"
 
 
-RoadDetectionY::RoadDetectionY(cv::Mat* src, cv::Mat* des):ObjectDetection(src, des)
+RoadDetectionY::RoadDetectionY(cv::Mat* src, cv::Mat* des):ObjectDetection(src, des), photoIndex(0)
 {
-	photoIndex = 0;
 	minVotes = 80;
 	minLength = 80;
 	lowThres = 30;
@@ -15,9 +14,8 @@ RoadDetectionY::RoadDetectionY(cv::Mat* src, cv::Mat* des):ObjectDetection(src, 
 	init();
 }
 
-RoadDetectionY::RoadDetectionY(cv::Mat* src, cv::Mat* des, int rx, int ry):ObjectDetection(src, des, rx, ry)
+RoadDetectionY::RoadDetectionY(cv::Mat* src, cv::Mat* des, int rx, int ry):ObjectDetection(src, des, rx, ry), photoIndex(0)
 {
-	photoIndex = 0;
 	resoX = rx;
 	resoY = ry;
 	minVotes = 80;
@@ -40,17 +38,22 @@ bool RoadDetectionY::detect()
 {
 	bool isFind = find_edge();
 
-	if(!isFind)
-		return false;
-
-		
-	// Draw line segments according to their cluster
-	msac.drawCS(*srcImg, lineSegmentsClusters, vps);
 	char file[255] = {'\0'};
-	sprintf(file, "result/r_y_%d.jpeg", photoIndex++);
-	cv::imwrite(file, *srcImg);
-	if(vps.empty())
+	msac.drawCS(*srcImg, lineSegmentsClusters, vps);
+
+	if(!isFind)
+	{
+		printf("ENV_DETECT: No route found vertically\n");
+		sprintf(file, "result/undetected_r_y_%d.jpeg", photoIndex++);
+		cv::imwrite(file, *srcImg);
 		return false;
+	}
+	printf("ENV_DETECT: Route found vertically\n"); 
+	sprintf(file, "result/detected_r_y_%d.jpeg", photoIndex++);
+	cv::imwrite(file, *srcImg);
+
+	// Draw line segments according to their cluster
+	//msac.drawCS(*srcImg, lineSegmentsClusters, vps);
 	return true;
 }
 
@@ -101,14 +104,12 @@ void RoadDetectionY::get_offsets(double* x, double* y)
 	
 	if(left && right)
 	{
-		printf("you are on the road\n");
 		*x = 0;
 		*y = 0;
 		return;
 	}
 	else if(left)
 	{
-		printf("the road is on your left\n");
 		unsigned int numLines = lineSegmentsClusters[vpIndex].size();
 		point1 = lineSegmentsClusters[vpIndex][numLines/2][0];
 		point2 = lineSegmentsClusters[vpIndex][numLines/2][1];
@@ -119,7 +120,6 @@ void RoadDetectionY::get_offsets(double* x, double* y)
 	}
 	else if(right)
 	{
-		printf("the road is on your right\n");
 		unsigned int numLines = lineSegmentsClusters[vpIndex].size();
 		point1 = lineSegmentsClusters[vpIndex][numLines/2][0];
 		point2 = lineSegmentsClusters[vpIndex][numLines/2][1];
@@ -134,7 +134,7 @@ void RoadDetectionY::get_offsets(double* x, double* y)
 	C = point1.x * (point2.y - point1.y) - point1.y * (point2.x - point1.x);
 	dis = abs(A*point0.x + B*point0.y + C);
 	dis = dis/(sqrt(A*A + B*B));
-	printf("the distance is %f\n", dis);
+	printf("ENV_DETECT: The distance is %f\n", 0);
 	cv::line(*desImg, point1, point2, cv::Scalar(0, 0, 0));
 
 	*x = dis;
@@ -167,6 +167,7 @@ void RoadDetectionY::init()
 
 bool RoadDetectionY::find_edge()
 {
+	bool isYV = false; // check if the vanishing point is on the horizontal direction
 	int houghThreshold = 70;
 	if(srcImg->cols * srcImg->rows < 400*400)
 		houghThreshold = 100;		
@@ -215,8 +216,10 @@ bool RoadDetectionY::find_edge()
 			fflush(stdout);
 		}
 		printf("\n");
+		if(fabs(vps[v].at<float>(0, 0) + resoX/2.) < 10*resoX)
+			isYV = true;
 	}		
-	if(vps.empty())
+	if(!isYV)
 		return false;
 	return true;
 	
