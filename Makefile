@@ -2,7 +2,7 @@ CC=g++
 CFLAGS='-g'
 INFLAGS=-I./
 LDFLAGS=
-SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc
+SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=run
 

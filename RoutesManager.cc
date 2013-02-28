@@ -19,6 +19,8 @@ int RoutesManager::get_route(const string src, const string dest, Route &route)
 	Coordinate coor;
 	RoutePoint rtPnt;
 
+	route.pnts.clear();
+
 	coor.lat = 45.759291;
 	coor.lon = 3.111344;
 	rtPnt.name = "ISIMA GATE";

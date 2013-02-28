@@ -5,6 +5,7 @@
 #include "Coordinate.h"
 #include "RoutesManager.h"
 #include "LatLongUtility.h"
+#include "NavigationEngine.h"
 
 using namespace std;
 
@@ -24,14 +25,11 @@ int main()
 	}
 
 #endif
-	RoutesManager rtsMng;
-	Route rt;
-
-	rtsMng.get_route("ISIMA GATE", "TRAM Station", rt);
+	NavigationEngine nvgEng;
 	
-	double distance;
-	distance = LatLongUtility::calc_distance(rt.pnts[0].coor, rt.pnts[1].coor);
-	cout << distance << endl;
+	int i = 0;
+	while(i++ < 4)
+		nvgEng.navigate("ISIMA GATE", "TRAM Station");
 
 	return 0;
 }

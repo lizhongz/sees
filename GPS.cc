@@ -8,10 +8,31 @@ using namespace std;
 
 #define O_FLAGS	(O_RDONLY | O_NOCTTY | O_NDELAY)
 
+// test
+vector<Coordinate> coors;
+
 GPS::GPS(char *path)
 	:dev(path, O_FLAGS)
 {
-
+	// test
+	coors.push_back(Coordinate("ab",45.75963,3.110703));
+	coors.push_back(Coordinate("ab",45.75981,3.111636));
+	coors.push_back(Coordinate("ab",45.759574,3.110858));
+	coors.push_back(Coordinate("ab",45.759361,3.111244));
+	coors.push_back(Coordinate("ab",45.759286,3.111341));
+	coors.push_back(Coordinate("ab",45.759226,3.111405));
+	coors.push_back(Coordinate("ab",45.759159,3.111395));
+	coors.push_back(Coordinate("ab",45.759134,3.11147));
+	coors.push_back(Coordinate("ab",45.759041,3.11147));
+	coors.push_back(Coordinate("ab",45.758783,3.111652));
+	coors.push_back(Coordinate("ab",45.758672,3.111786));
+	coors.push_back(Coordinate("ab",45.758481,3.111896));
+	coors.push_back(Coordinate("ab",45.758266,3.112092));
+	coors.push_back(Coordinate("ab",45.758562,3.113028));
+	coors.push_back(Coordinate("ab",45.758624,3.11306));
+	coors.push_back(Coordinate("ab",45.758614,3.113264));
+	coors.push_back(Coordinate("ab",45.758828,3.113744));
+	coors.push_back(Coordinate("ab",45.758843,3.113898));
 }
 
 GPS::~GPS()
@@ -19,8 +40,14 @@ GPS::~GPS()
 
 }
 
-int GPS::positioning(Coordinate &coor)
+int GPS::locate(Coordinate &coor)
 {
+	// test
+	static int i = 0;
+	coor = coors[i++];
+		
+	
+#if 0
 	string msg;
 	RMC_data rmcData;
 	
@@ -36,7 +63,7 @@ int GPS::positioning(Coordinate &coor)
 	coor.lat = rmcData.latitude;
 	coor.lon = rmcData.longitude;
 	coor_format_convert(coor.lat, rmcData.dir_ns, coor.lon, rmcData.dir_ew);
-
+#endif
 	return 0;
 }
 

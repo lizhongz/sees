@@ -43,8 +43,8 @@ public:
 	GPS(char *path);
 	~GPS();
 
-	// Positioning an return a coordinate
-	int positioning(Coordinate &coor);
+	// Locate and return a coordinate
+	int locate(Coordinate &coor);
 };
 
 #endif
