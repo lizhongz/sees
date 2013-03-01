@@ -61,7 +61,7 @@ int Uart::uart_read(char *data, int len)
 
 	for(i = 0; i < len; i++)
 	{
-		printf(".");		
+		//printf(".");		
 		flag = read(fd, &data[i], 1);	
 		if(flag == -1)	// Error
 		{

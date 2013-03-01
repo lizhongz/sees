@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "GPS.h"
+#include "log.h"
 
 using namespace std;
 
@@ -43,27 +44,28 @@ GPS::~GPS()
 int GPS::locate(Coordinate &coor)
 {
 	// test
-	static int i = 0;
-	coor = coors[i++];
+//	static int i = 0;
+//	coor = coors[i++];
 		
-	
-#if 0
 	string msg;
 	RMC_data rmcData;
 	
 	// Read positioning message of RMC format
 	read_rmc_msg(msg);
-	cout << msg << endl;
+	// cout << msg << endl;
 
 	// Parse RMC message
 	parse_rmc(msg, rmcData); 	
+
+	if(rmcData.status == 'V')
+		FILE_LOG(logWARNING) << "GPS: not valid data";
 	
 	// Coordinate format convertion
 	coor.utc = rmcData.utc;
 	coor.lat = rmcData.latitude;
 	coor.lon = rmcData.longitude;
 	coor_format_convert(coor.lat, rmcData.dir_ns, coor.lon, rmcData.dir_ew);
-#endif
+
 	return 0;
 }
 

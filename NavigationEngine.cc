@@ -5,6 +5,7 @@
 #include "GPS.h"
 #include "RoutesManager.h"
 #include "LatLongUtility.h"
+#include "log.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int NavigationEngine::navigate(string srcName, string destName)
 	if(rtMng.get_route(srcName, destName, route) != 0)
 	{
 		// Fail to find a route
-		cout << "Error: findding route" << endl;
+		FILE_LOG(logINFO) << "Navig: Route does not exist";
 		return -1;
 	}
 
@@ -35,7 +36,7 @@ int NavigationEngine::navigate(string srcName, string destName)
 	if(gps.locate(cur_pos) != 0)
 	{
 		// Fail to locate
-		cout << "Error: locating" << endl;
+		FILE_LOG(logERROR) << "Navig: GPS locating error";
 		return -1;		
 	}
 
@@ -43,17 +44,17 @@ int NavigationEngine::navigate(string srcName, string destName)
 	double dist2rt = LatLongUtility::calc_p2l_dist(cur_pos, 
 		route.pnts[0].coor, route.pnts[1].coor);
 
-	cout << "Current Position: " << cur_pos.lat << ", " << cur_pos.lon << endl;
-	cout << "Distance to route: " << dist2rt << endl;
+	FILE_LOG(logINFO) << "Navig: VIP's Position: " << cur_pos.lat 
+		<< ", " << cur_pos.lon;
+	FILE_LOG(logINFO) << "Navig: Distance to route: " << dist2rt;
 
 	if(abs(dist2rt) > DIST_2_RT_TRSHD)
 	{
 		// VIP is not close to the route
-		cout << "VIP is not close to route" << endl;
 		return -1;	
 	}
 
-	cout << "Begin to navigate" << endl;
+	FILE_LOG(logINFO) << "Navig: Begin to navigate";
 
 	// Begin to navigate
 	
@@ -65,8 +66,8 @@ int NavigationEngine::navigate(string srcName, string destName)
 			route.pnts[sub_rt_inx].coor);	
 		sub_rt_rm_dist = sub_rt_dist;
 
-		cout << "Route index: " << sub_rt_inx << endl;
-		cout << "Route length: " << sub_rt_dist << endl;
+		FILE_LOG(logINFO) << "Navig: Sub-route index: " << sub_rt_inx;
+		FILE_LOG(logINFO) << "Navig: Sub-route length: " << sub_rt_dist;
 
 		while(sub_rt_rm_dist > DIST_2_RTPNT_TRSHD)
 		{
@@ -83,8 +84,10 @@ int NavigationEngine::navigate(string srcName, string destName)
 			sub_rt_rm_dist = LatLongUtility::calc_p2p_dist(
 				cur_pos, route.pnts[sub_rt_inx].coor);	
 			
-			cout << "Current Position: " << cur_pos.lat << ", " << cur_pos.lon << endl;
-			cout << "Remain distance: " << sub_rt_rm_dist << endl;
+			FILE_LOG(logINFO) << "Navig: VIP's Position: " 
+				<< cur_pos.lat << ", " << cur_pos.lon;
+			FILE_LOG(logINFO) << "Navig: Remaining distance: " 
+				<< sub_rt_rm_dist;
 		}	
 	
 		// Arriving at a route point
@@ -92,8 +95,7 @@ int NavigationEngine::navigate(string srcName, string destName)
 		if(sub_rt_inx == (subRtNum - 1))
 		{
 			// Arriving at destination
-			cout << "Arriving at destination" << endl;
-
+			FILE_LOG(logINFO) << "Navig: Arriving at destination";
 		}
 		else
 		{
@@ -106,11 +108,14 @@ int NavigationEngine::navigate(string srcName, string destName)
 
 			// Turning or crossing the road
 			
-			cout << "Route point: " << route.pnts[sub_rt_inx].coor.lat 
-				<< route.pnts[sub_rt_inx].coor.lon << endl;
-			cout << "angle: " << angle << endl;
+			FILE_LOG(logINFO) << "Navig: Arriving at Route point: " 
+				<< route.pnts[sub_rt_inx].coor.lat 
+				<< route.pnts[sub_rt_inx].coor.lon;
+			FILE_LOG(logINFO) << "Navig: Angle: " << angle;
 		}
 	}
+	
+	return 0;
 }
 
 int NavigationEngine::init_devs()

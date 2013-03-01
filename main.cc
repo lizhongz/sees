@@ -6,30 +6,23 @@
 #include "RoutesManager.h"
 #include "LatLongUtility.h"
 #include "NavigationEngine.h"
+#include "log.h"
 
 using namespace std;
 
 int main()
 {
-	Coordinate coor;
-#if 0
-	GPS gpsDev = GPS((char *)"/dev/ttyACM0");
-
-	for(int i = 0; i < 1; i++)
-	{
-		gpsDev.positioning(coor);
-		
-		cout <<  coor.utc << ", ";
-		cout <<  coor.lat << ", "; 
-		cout <<  coor.lon << endl;
-	}
-
-#endif
 	NavigationEngine nvgEng;
 	
+	FILE* pFile = fopen("app.log", "w");
+	Output2FILE::Stream() = pFile;
+        FILELog::ReportingLevel() = FILELog::FromString("DEBUG1");
+
 	int i = 0;
-	while(i++ < 4)
+	while(1)
+	{
 		nvgEng.navigate("ISIMA GATE", "TRAM Station");
+	}
 
 	return 0;
 }
