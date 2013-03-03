@@ -79,6 +79,7 @@ int NavigationEngine::navigate(string srcName, string destName)
 			if(gps.locate(cur_pos) != 0)
 			{
 				// Fail to locate
+				FILE_LOG(logERROR) << "Navig: GPS locating error";
 				return -1;		
 			}
 			sub_rt_rm_dist = LatLongUtility::calc_p2p_dist(

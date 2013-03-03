@@ -52,19 +52,23 @@ int GPS::locate(Coordinate &coor)
 	
 	// Read positioning message of RMC format
 	read_rmc_msg(msg);
-	// cout << msg << endl;
+	cout << msg << endl;
 
 	// Parse RMC message
 	parse_rmc(msg, rmcData); 	
 
 	if(rmcData.status == 'V')
+	{
 		FILE_LOG(logWARNING) << "GPS: not valid data";
+		return -1;
+	}
 	
 	// Coordinate format convertion
 	coor.utc = rmcData.utc;
 	coor.lat = rmcData.latitude;
 	coor.lon = rmcData.longitude;
-	coor_format_convert(coor.lat, rmcData.dir_ns, coor.lon, rmcData.dir_ew);
+	coor_format_convert(coor.lat, rmcData.dir_ns, 
+		coor.lon, rmcData.dir_ew);
 
 	return 0;
 }
@@ -79,9 +83,11 @@ void GPS::read_rmc_msg(string &msg)
 	while(1)
 	{
 		// Move to a beginning position
-		do {
+		/*do {
 			dev.uart_read(&ch, 1);
 		} while(ch != '$');
+		*/
+		while((dev.uart_read(&ch, 1) < 1) || (ch != '$')) ;
 
 		// Read the GNSS data head
 		for(int i = 0; i < 5; i++)

@@ -57,8 +57,6 @@ double LatLongUtility::calc_direction(const Coordinate &x,
 
 	// Convert bearing to direction in degree
 	double direction = rad2deg(bearing);
-	if(direction < 0)
-		direction += 360.0;
 
 	return direction;
 }
@@ -138,7 +136,7 @@ double LatLongUtility::calc_bearing(const Coordinate &x,
 			: (2 * M_PI + dLon);
 	}
 
-	return atan2(dLon, dPhi);
+	return atan2(dLon, dPhi); // return value [-pi, pi]
 }
 
 double LatLongUtility::calc_angle(const Coordinate &stPntL1, 
