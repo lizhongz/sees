@@ -44,8 +44,13 @@ GPS::~GPS()
 int GPS::locate(Coordinate &coor)
 {
 	// test
-//	static int i = 0;
-//	coor = coors[i++];
+	static int i = 0;
+	coor = coors[i++];
+	if(i == coors.size())
+	{
+		i = 0;
+	}
+	return 0;
 		
 	string msg;
 	RMC_data rmcData;

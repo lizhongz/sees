@@ -8,7 +8,7 @@
 class LatLongUtility
 {
 private:
-	static const double RADIUS_EARTH = 6371000.0; // Radius of Earth (unit meter)
+	static constexpr double RADIUS_EARTH = 6371000.0; // Radius of Earth (unit meter)
 
 public:
 	/**
@@ -32,8 +32,6 @@ public:
  	 * @return corresponding degree of the radians
  	 */
 	static double rad2deg(double rad);
-	
-
 
 	/** 
   	 * Calculate Rhumb line's bearing(unit: radian)

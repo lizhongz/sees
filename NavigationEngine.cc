@@ -20,47 +20,29 @@ NavigationEngine::~NavigationEngine()
 
 }
 
-int NavigationEngine::navigate(string srcName, string destName)
+void NavigationEngine::run()
+{
+	m_stop = false;
+
+	try
+	{
+		navigate();
+	
+	} catch(...) { /* ... */ }
+
+	m_stop = true;
+}
+
+int NavigationEngine::navigate()
 {	
-	RoutesManager	rtMng;
-
-	// Find a route
-	if(rtMng.get_route(srcName, destName, route) != 0)
-	{
-		// Fail to find a route
-		FILE_LOG(logINFO) << "Navig: Route does not exist";
-		return -1;
-	}
-
-	// Get current position by using GPS 
-	if(gps.locate(cur_pos) != 0)
-	{
-		// Fail to locate
-		//FILE_LOG(logERROR) << "Navig: GPS locating error";
-		//return -1;		
-	}
-
-	// Calculate the distance to the first sub-route
-	double dist2rt = LatLongUtility::calc_p2l_dist(cur_pos, 
-		route.pnts[0].coor, route.pnts[1].coor);
-
-	FILE_LOG(logINFO) << "Navig: VIP's Position: " << cur_pos.lat 
-		<< ", " << cur_pos.lon;
-	FILE_LOG(logINFO) << "Navig: Distance to route: " << dist2rt;
-
-	if(abs(dist2rt) > DIST_2_RT_TRSHD)
-	{
-		// VIP is not close to the route
-		return -1;	
-	}
-
+	// Begin to navigate
 	FILE_LOG(logINFO) << "Navig: Begin to navigate";
 
-	// Begin to navigate
-	
 	int subRtNum = route.pnts.size();
 	for(sub_rt_inx = 1; sub_rt_inx < subRtNum; sub_rt_inx++)	
 	{
+		stop_point(); // If stop navigating
+
 		// Calculate sub-route length
 		sub_rt_dist = LatLongUtility::calc_p2p_dist(cur_pos, 
 			route.pnts[sub_rt_inx].coor);	
@@ -71,10 +53,10 @@ int NavigationEngine::navigate(string srcName, string destName)
 
 		while(sub_rt_rm_dist > DIST_2_RTPNT_TRSHD)
 		{
+			stop_point(); // If stop navigating
+
 			// On the sub-route
 				
-			usleep(LOCATING_INTVL);
-
 			// Locating and calculate remaining distance
 			if(gps.locate(cur_pos) != 0)
 			{
@@ -89,6 +71,8 @@ int NavigationEngine::navigate(string srcName, string destName)
 				<< cur_pos.lat << ", " << cur_pos.lon;
 			FILE_LOG(logINFO) << "Navig: Remaining distance: " 
 				<< sub_rt_rm_dist;
+
+			usleep(LOCATING_INTVL);
 		}	
 	
 		// Arriving at a route point
@@ -116,6 +100,43 @@ int NavigationEngine::navigate(string srcName, string destName)
 		}
 	}
 	
+	return 0;
+}
+
+int NavigationEngine::setup_route(string srcName, string destName)
+{
+	RoutesManager	rtMng;
+
+	// Find a route
+	if(rtMng.get_route(srcName, destName, route) != 0)
+	{
+		// Fail to find a route
+		FILE_LOG(logINFO) << "Navig: Route does not exist";
+		return -1;
+	}
+
+	// Get current position by using GPS 
+	if(gps.locate(cur_pos) != 0)
+	{
+		// Fail to locate
+		// FILE_LOG(logERROR) << "Navig: GPS locating error";
+		// return -1;		
+	}
+
+	// Calculate the distance to the first sub-route
+	double dist2rt = LatLongUtility::calc_p2l_dist(cur_pos, 
+		route.pnts[0].coor, route.pnts[1].coor);
+
+	FILE_LOG(logINFO) << "Navig: VIP's Position: " << cur_pos.lat 
+		<< ", " << cur_pos.lon;
+	FILE_LOG(logINFO) << "Navig: Distance to route: " << dist2rt;
+
+	if(abs(dist2rt) > DIST_2_RT_TRSHD)
+	{
+		// VIP is not close to the route
+		return -1;	
+	}
+
 	return 0;
 }
 

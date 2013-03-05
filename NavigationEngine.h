@@ -6,10 +6,11 @@
 #include "RoutesManager.h"
 #include "Coordinate.h"
 #include "GPS.h"
+#include "Runnable.h"
 
 using namespace std;
 
-class NavigationEngine
+class NavigationEngine : public Runnable
 {
 private:
 	GPS		gps;		// GPS receiver
@@ -20,12 +21,12 @@ private:
 	double		sub_rt_rm_dist;	// Remaining Distance from current position to the end of sub_rt
 	// Only the distance for VIP to the route 
 	// is less than this value can this engine navigate
-	static const double DIST_2_RT_TRSHD = 10.0;
+	static constexpr double DIST_2_RT_TRSHD = 10.0;
 	// Distance threshold for testing if 
 	// VIP arrives at a route point
-	static const double DIST_2_RTPNT_TRSHD = 4.0;
+	static constexpr double DIST_2_RTPNT_TRSHD = 4.0;
 	// Locating interval (unit:microsecond)
-	static const double LOCATING_INTVL = 1000000;
+	static constexpr double LOCATING_INTVL = 1000000;
 public:
 	NavigationEngine();
 	
@@ -35,7 +36,13 @@ public:
 	int init_devs();
 
 	// Navigate by knowing source name destination name
-	int navigate(string srcName, string destName);
+	int navigate();
+
+	// Setup route according to the source and destination name
+	int setup_route(string srcName, string destName);
+
+	// Inherited from Runnable class
+	void run();
 };
 
 #endif
