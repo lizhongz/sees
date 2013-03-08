@@ -40,10 +40,13 @@ void Control::schedule()
 		}
 		else if(cmd.compare("stnv") == 0)
 		{
-			// Setup and start to navigate
-			if(start_nvigt() != 0)
+			while(1)
 			{
-				FILE_LOG(logINFO) << "Ctrl: Cannot navigation";
+				// Setup and start to navigate
+				if(start_nvigt() != 0)
+				{
+					FILE_LOG(logINFO) << "Ctrl: Cannot navigation";
+				}
 			}
 		}
 		else if(cmd.compare("spnv") == 0)
@@ -109,10 +112,10 @@ int Control::start_nvigt()
 	string destName;
 
 	// Get source and destination name
-	cout << "Source name: ";
-	cin >> srcName;
-	cout << "Destination name: ";
-	cin >> destName;
+	//cout << "Source name: ";
+	//cin >> srcName;
+	//cout << "Destination name: ";
+	//cin >> destName;
 
 	if(p_nvigt_eng == NULL)
 	{

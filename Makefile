@@ -2,7 +2,7 @@ CC=g++ -std=c++11
 CFLAGS='-g'
 INFLAGS=-I./
 LDFLAGS=-lpthread
-SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc Runnable.cc Control.cc
+SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc Runnable.cc Control.cc Client.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=run
 
