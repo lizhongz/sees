@@ -1,2 +1,15 @@
 <?xml version="1.0"?>
-<gpx />
+<gpx>
+	<rte>
+		<name />
+		<rtept lon="3.11134" lat="45.7593">
+			<name>ISIMA GATE</name>
+		</rtept>
+		<rtept lon="3.11207" lat="45.7583">
+			<name />
+		</rtept>
+		<rtept lon="3.11389" lat="45.7588">
+			<name>Tram Station</name>
+		</rtept>
+	</rte>
+</gpx>

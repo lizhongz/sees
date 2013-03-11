@@ -3,6 +3,12 @@
 	<trk>
 		<name />
 		<trkseg>
+			<trkpt lon="3.11147" lat="45.759">
+				<time>ab</time>
+			</trkpt>
+			<trkpt lon="3.1114" lat="45.7592">
+				<time>ab</time>
+			</trkpt>
 			<trkpt lon="3.11374" lat="45.7588">
 				<time>ab</time>
 			</trkpt>
