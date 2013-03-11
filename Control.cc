@@ -4,16 +4,22 @@
 
 using namespace std;
 
-Control::Control() : p_nvigt_eng(NULL)
+Control::Control() : p_nvigt_eng(NULL), p_client(NULL)
 {
 	// Open log function
 	p_log_file = fopen("app.log", "w");
 	// Output2FILE::Stream() = p_log_file;
         FILELog::ReportingLevel() = FILELog::FromString("DEBUG1");
+	
+	// Open sees client
+	open_sees_client();
 }
 
 Control::~Control()
 {
+	// Close sees client
+	close_sees_client();
+
 	// Close log file
 	fclose(p_log_file);
 }
@@ -46,6 +52,10 @@ void Control::schedule()
 				if(start_nvigt() != 0)
 				{
 					FILE_LOG(logINFO) << "Ctrl: Cannot navigation";
+				}
+				else
+				{
+					break;
 				}
 			}
 		}
@@ -92,6 +102,29 @@ void Control::close_nvigt_eng()
 	FILE_LOG(logINFO) << "Ctrl: Navigaton engine was stopped";
 }
      
+void Control::open_sees_client()
+{
+	// Create SeesClient object
+	p_client = new SeesClient();
+
+	// Set pointer of control class
+	p_client->set_p_ctrl(this);
+
+	// Create sees client thread
+	p_client->start();
+
+	FILE_LOG(logINFO) << "Ctrl: Sees client was opened";
+}
+	
+void Control::close_sees_client()
+{
+	// Delete navigation engine
+	delete p_client;
+	p_client = NULL;
+
+	FILE_LOG(logINFO) << "Ctrl: Navigaton engine was stopped";
+}
+
 int Control::start_nvigt()
 {
 	if(p_nvigt_eng == NULL)
@@ -116,12 +149,6 @@ int Control::start_nvigt()
 	//cin >> srcName;
 	//cout << "Destination name: ";
 	//cin >> destName;
-
-	if(p_nvigt_eng == NULL)
-	{
-		// If navigation engine is not opened
-		return -1;
-	}
 
 	// Set up navigation route
 	if(p_nvigt_eng->setup_route("ISIMA GATE", 
@@ -152,3 +179,7 @@ void Control::stop_nvigt()
 	p_nvigt_eng->stop();	
 }
 
+NavigationEngine * Control::get_nvigt_eng() const	
+{
+	return p_nvigt_eng;
+}

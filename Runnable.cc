@@ -14,6 +14,7 @@ void Runnable::start()
 {
 	// Create new thread
 	m_thread = std::thread(&Runnable::run, this); 
+	m_thread.detach();
 }
 
 void Runnable::stop() 
@@ -22,7 +23,7 @@ void Runnable::stop()
 		return;
 
 	m_stop = true; 
-	m_thread.join(); 
+	//m_thread.join(); 
 }
 
 void Runnable::stop_point() 

@@ -9,7 +9,8 @@
 
 using namespace std;
 
-NavigationEngine::NavigationEngine():gps(GPS((char *)"/dev/ttyACM0"))
+NavigationEngine::NavigationEngine() : 
+	gps(GPS((char *)"/dev/ttyACM0")), run_times(0)
 {
 	// Initialize devices
 	init_devs();
@@ -23,12 +24,13 @@ NavigationEngine::~NavigationEngine()
 void NavigationEngine::run()
 {
 	m_stop = false;
+	run_times += 1;
 
 	try
 	{
 		navigate();
 	
-	} catch(...) { /* ... */ }
+	} catch(int i) { /* ... */ }
 
 	m_stop = true;
 }
@@ -145,3 +147,29 @@ int NavigationEngine::init_devs()
 	// Initialize GPS
 	//gps = GPS((char *)"/dev/ttyACM0");
 }
+
+int NavigationEngine::get_cur_pos(Coordinate &coor)
+{
+	if(is_running()) // If navigation engine is running
+	{
+		coor = this->cur_pos;
+		return 0;
+	}
+	else
+	{
+		// Get location by using GPS
+		return gps.locate(coor);
+	}
+}
+
+int NavigationEngine::get_route(Route &rte)
+{
+	if(is_running()) // If navigation engine is running
+	{
+		rte = this->route;
+		return 0;
+	}
+
+	return -1;
+}
+

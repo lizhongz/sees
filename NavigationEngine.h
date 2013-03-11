@@ -19,6 +19,7 @@ private:
 	int		sub_rt_inx;	// Index of next route point in route 
 	double		sub_rt_dist;	// Distance of current sub-route	
 	double		sub_rt_rm_dist;	// Remaining Distance from current position to the end of sub_rt
+	int 		run_times;	// Navigation times
 	// Only the distance for VIP to the route 
 	// is less than this value can this engine navigate
 	static constexpr double DIST_2_RT_TRSHD = 10.0;
@@ -43,6 +44,12 @@ public:
 
 	// Inherited from Runnable class
 	void run();
+	
+	// Get current position
+	int get_cur_pos(Coordinate &coor);
+
+	// Get route
+	int get_route(Route &rte);
 };
 
 #endif

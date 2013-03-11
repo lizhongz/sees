@@ -1,8 +1,8 @@
 CC=g++ -std=c++11
-CFLAGS='-g' -D_GLIBCXX_USE_NANOSLEEP
+CFLAGS='-g'
 INFLAGS=-I./
 LDFLAGS=-lpthread
-SOURCES=main.cc Uart.cc GPS.cc RoutesManager.cc Route.cc RoutePoint.cc Coordinate.cc LatLongUtility.cc NavigationEngine.cc Runnable.cc Control.cc Client.cc CommProtocol.cc pugixml.cc GPXHelper.cc SeesClient.cc
+SOURCES=main.cc Server.cc SeesServer.cc CommProtocol.cc GPXHelper.cc Route.cc RoutePoint.cc Coordinate.cc pugixml.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=run
 
