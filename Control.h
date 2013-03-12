@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "NavigationEngine.h"
 #include "env_detection.h"
+#include "SeesClient.h"
 
 class Control
 {
@@ -26,10 +27,24 @@ public:
 	// Stop navigating
 	void stop_nvigt();
 
+	// Open sees client
+	void open_sees_client();
+	
+	// Close sees client
+	void close_sees_client();
+
+	// Get navigation engine
+	NavigationEngine * get_nvigt_eng() const;	
+	
+
 private:
 	NavigationEngine *p_nvigt_eng; // Navigation engine
-	EnvDetection	 *p_env_det;
-	FILE *p_log_file;
+
+	EnvDetection	*p_env_det; // Pointer of environment detection
+
+	SeesClient	*p_client; // Pointer of SeesClient object
+
+	FILE		*p_log_file; // Log file's pointer
 };
 
 #endif // _CONTROL_H_

@@ -9,7 +9,6 @@
 #include "log.h"
 #include "unistd.h"
 #include "Control.h"
-//#include "Config.h"
 
 using namespace std;
 
